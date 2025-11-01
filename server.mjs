@@ -287,7 +287,7 @@ const multipartMiddleware = (next) => (req, res) => {
 
 const slowMiddleware = (next) => (req, res) => {
     console.log('slow');
-    setTimeout(() => next(req, res), 10000);
+    setTimeout(() => next(req, res), 5000);
 };
 
 const sseReloadHandler = (req, res) => {

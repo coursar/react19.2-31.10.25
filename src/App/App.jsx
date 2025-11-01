@@ -3,6 +3,7 @@
 //  - string, ..., undefined
 
 import { useEffect, useState } from "react"
+import Message from "../Message/Message"
 
 // TODO: top mistakes for return
 //  1. omit return
@@ -14,7 +15,7 @@ const App = () => {
 
   // destructuring
   // JS -> array -> tuple : [data, fn]
-  const [messages, setMessages] = useState([])
+  const [data, setData] = useState([])
   // const value = useState([])
   // const data = value[0]
   // const setData = value[1]
@@ -45,7 +46,7 @@ const App = () => {
           throw new Error('bad response')
         }
         const data = await resp.json()
-        setMessages(data)
+        setData(data)
       } catch (e) {
         console.warn(e)
       }
@@ -59,11 +60,16 @@ const App = () => {
   // 0. {expression}
   // 1. obj -> element => [obj].map(obj -> <></>) => [el]
 
+  // key TOP-Errors:
+  // 1. key not in topmost element
+  // 2. key is not unique
+  // 3. key generated inside render/or app
+  // 4. index'
   return (
     <>
       Messages
-      {messages.map(o => 
-        <div>{o.data}</div>
+      {data.map(o => 
+        <Message key={o.id} message={o.data}></Message>
       )}
     </>
   )
