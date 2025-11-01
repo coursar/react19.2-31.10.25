@@ -2,7 +2,7 @@
 //  - JSX -> React.Element
 //  - string, ..., undefined
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 // TODO: top mistakes for return
 //  1. omit return
@@ -11,6 +11,13 @@ import { useEffect } from "react"
 // SOLUTION => return (<> ... </>)
 const App = () => {
   // React.Fragment -> container, doesn't create any DOM
+
+  // destructuring
+  // JS -> array -> tuple : [data, fn]
+  const [messages, setMessages] = useState([])
+  // const value = useState([])
+  // const data = value[0]
+  // const setData = value[1]
 
   // TODO: top mistakes inside component
   // 1. write function to get data (Suspense + Data Fetching)
@@ -38,6 +45,7 @@ const App = () => {
           throw new Error('bad response')
         }
         const data = await resp.json()
+        setMessages(data)
       } catch (e) {
         console.warn(e)
       }
@@ -47,9 +55,16 @@ const App = () => {
 
   }, []) // [] - executes "on mount" (after mount) - dependencies
 
+  // [{id: ..., data: '...}] => React.Element
+  // 0. {expression}
+  // 1. obj -> element => [obj].map(obj -> <></>) => [el]
+
   return (
     <>
       Messages
+      {messages.map(o => 
+        <div>{o.data}</div>
+      )}
     </>
   )
 }

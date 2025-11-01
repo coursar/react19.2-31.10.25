@@ -752,7 +752,7 @@ router.register('GET', '/api/test/poll', (req, res) => {
     // TODO: SELECT in DB
     const newMessages = messages.filter(o => o.id > lastSeendId);
     Router.json(req, res, { data: newMessages });
-});
+}, slowMiddleware);
 // plus: interactivity
 // minus: multiple connection to server
 router.register('GET', '/api/test/long-poll', longPollingHandler);
