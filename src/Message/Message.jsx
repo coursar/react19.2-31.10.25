@@ -10,7 +10,7 @@
 // }
 
 // const {message} = props;
-const Message = ({key, message}) => {
+const Message = ({message}) => {
     return (
         <>
             <div>
