@@ -774,8 +774,8 @@ router.register('GET', '/api/test/message', (req, res) => {
 
     wsClients.forEach((client) => client.sendJSON([newMessage])); 
 
-    Router.json(req, res, { data: { value: 'ok' } });
-}, jsonMiddleware);
+    Router.json(req, res, { data: messages });
+}, jsonMiddleware, slowMiddleware);
 
 router.register('GET', '/api/suspend/data', (req, res) => {
     Router.json(req, res, { data: { username: 'ok' } });
