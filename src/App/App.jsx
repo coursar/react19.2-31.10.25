@@ -4,6 +4,8 @@
 
 import { useEffect, useState } from "react"
 import Message from "../Message/Message"
+import MessageList from "../MessageList/MessageList"
+import MessageForm from "../MessageForm/MessageForm"
 
 // 1. Slow -> Progress
 // 2. Error Handling -> Retry
@@ -34,22 +36,6 @@ const App = () => {
     request()
   }, [])
 
-  if (isPending) {
-    return (
-      <>
-        Loading...
-      </>
-    )
-  }
-
-  if (error) { // 0, null, undefined, false, ... -> falsy
-    return (
-      <>
-        {error.message}
-      </>
-    ) 
-  }
-
   // browser: Event, React -> Synthetic Event
   // ev: default action -> load
   /**
@@ -71,6 +57,8 @@ const App = () => {
       if (!resp.ok) { // 2xx
         throw new Error('bad response')
       }
+      // HW: no data -> make other request
+      //     slow response
       const data = await resp.json()
       setData(data)
     } catch (e) {
@@ -84,17 +72,8 @@ const App = () => {
   return (
     <>
       {/* action="URL" method="GET" enctype="" => GET URL?data=URLEncoded(...) */}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input name="data" type="text" />
-        </div>
-        {/* HTML Specification => type="submit" */}
-        <button>Save</button>
-      </form>
-      Messages
-      {data.map(o => 
-        <Message key={o.id} message={o.data}></Message>
-      )}
+      <MessageForm disabled={isPending} onSubmit={handleSubmit} />
+      <MessageList isPending={isPending} items={data} />
     </>
   )
 }
