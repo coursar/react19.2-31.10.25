@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="module">
+        const type = 'ws'
+
+        if (type === 'polling') {
+            let lastSeenId = 0
+            const poll = async () => {
+                try {
+                    const resp = await fetch(`http://localhost:9999/api/test/poll?lastSeenId=${lastSeenId}`)
+                    if (!resp.ok) { // 2xx
+                        throw new Error('bad response')
+                    }
+                    const data = await resp.json()
+                    lastSeenId = data.at(-1)?.id || lastSeenId
+                    console.log(data, lastSeenId)
+                } catch (e) {
+                    console.warn(e)
+                } finally {
+                    setTimeout(poll, 5_000)
+                }
+            }
+            poll()
+        }
+
+        if (type === 'long-polling') {
+            let lastSeenId = 0
+            const longPoll = async () => {
+                try {
+                    const resp = await fetch(`http://localhost:9999/api/test/long-poll?lastSeenId=${lastSeenId}`)
+                    if (!resp.ok) { // 2xx
+                        throw new Error('bad response')
+                    }
+                    const data = await resp.json()
+                    lastSeenId = data.at(-1)?.id || lastSeenId
+                    console.log(data, lastSeenId)
+                    setTimeout(longPoll, 0)
+                } catch (e) {
+                    console.warn(e)
+                    setTimeout(longPoll, 10_000)
+                }
+            }
+            longPoll()
+        }
+
+        if (type === 'sse') {
+            // TODO: (use http/2+)
+            //  minus: no headers -> query/path params | cookie
+            //  plus: reconnect, auto-last-id, protocol
+            const sse = new EventSource(`http://localhost:9999/api/test/sse`)
+            sse.addEventListener('message', ev => {
+                console.log(ev)
+            })
+        }
+
+        if (type === 'ws') {
+            //  minus: no headers -> query/path params | cookie
+            //  minus: no reconnection, custom events, lastEventId
+            let lastSeenId = 0
+            let ws = new WebSocket('ws://localhost:9999')
+
+            ws.addEventListener('open', () => {
+                ws.send(JSON.stringify({
+                    type: 'messages',
+                    data: 'new message'
+                }))
+            })
+
+            ws.addEventListener('error', (ev) => {})
+
+            ws.addEventListener('close', (ev) => {
+                setTimeout(() => {
+                    ws = new WebSocket('ws://localhost:9999')
+                }, 10_000)
+            })
+
+            // ws.binaryType = ''
+
+            ws.addEventListener('message', (ev) => {
+                // from server only text data
+                const data = JSON.parse(ev.data)
+                const handler = routes.get(data.type)
+                handler(ev, data)
+            })
+        }
+    </script>
+</body>
+
+</html>

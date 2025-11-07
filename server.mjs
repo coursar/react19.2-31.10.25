@@ -752,7 +752,7 @@ router.register('GET', '/api/test/poll', (req, res) => {
     // TODO: SELECT in DB
     const newMessages = messages.filter(o => o.id > lastSeendId);
     Router.json(req, res, { data: newMessages });
-}, slowMiddleware);
+});
 // plus: interactivity
 // minus: multiple connection to server
 router.register('GET', '/api/test/long-poll', longPollingHandler);
@@ -775,7 +775,7 @@ router.register('GET', '/api/test/message', (req, res) => {
     wsClients.forEach((client) => client.sendJSON([newMessage])); 
 
     Router.json(req, res, { data: messages });
-}, jsonMiddleware, slowMiddleware);
+}, jsonMiddleware);
 
 router.register('GET', '/api/suspend/data', (req, res) => {
     Router.json(req, res, { data: { username: 'ok' } });
