@@ -8,4 +8,5 @@ createRoot(document.getElementById('root'), {identifierPrefix: 'messages_'}).ren
   // <StrictMode>
     <App />
   // </StrictMode>
+  // <Main/>
 )

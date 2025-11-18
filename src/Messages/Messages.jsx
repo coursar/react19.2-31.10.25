@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import Message from "../Message/Message"
 import MessageList from "../MessageList/MessageList"
 import MessageForm from "../MessageForm/MessageForm"
+import MessagesStats from "../MessagesStats/MessagesStats"
 
 // useState
 // useEffect
@@ -10,6 +11,7 @@ const Messages = () => {
     const [messages, setMessages] = useState([])
     const [isPending, setPending] = useState(false)
     const [error, setError] = useState(null)
+    const [counter, setCounter] = useState(1)
     const wsRef = useRef(null)
 
     // initial loading + background update => single object for both actions
@@ -59,7 +61,7 @@ const Messages = () => {
 
     return (
         <>
-            {/* action="URL" method="GET" enctype="" => GET URL?data=URLEncoded(...) */}
+            <MessagesStats items={messages} />
             <MessageForm disabled={isPending} onSubmit={handleSubmit} />
             <MessageList isPending={isPending} items={messages} />
         </>

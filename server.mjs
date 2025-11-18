@@ -164,7 +164,7 @@ const multipartMiddleware = (next) => (req, res) => {
         if (contentStartIndex === -1) {
             throw new Error('bad multipart: no content in part');
         }
-        const contentEndIndex = buffer.indexOf(CRLF, contentStartIndex + CRLFCRLF.length);
+        const contentEndIndex = buffer.lastIndexOf(CRLF);
         if (contentEndIndex === -1) {
             throw new Error('bad multipart: no content in part');
         }
