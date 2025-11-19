@@ -51,11 +51,13 @@ const Messages = () => {
     const handleSubmit = async (ev) => {
         ev.preventDefault()
 
-        // data = message (id generated on server)
-        const data = ev.currentTarget.elements.data.value
+        const formData = new FormData(ev.currentTarget)
+
+        // // data = message (id generated on server)
+        // const data = ev.currentTarget.elements.data.value
         wsRef.current?.send(JSON.stringify({
             type: 'message',
-            message: data, 
+            message: formData.get('data'), 
         }))
     }
 

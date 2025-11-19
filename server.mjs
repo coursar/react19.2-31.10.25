@@ -698,7 +698,7 @@ class Router {
     }
 };
 
-const router = new Router(corsMiddleware);
+const router = new Router(corsMiddleware, jsonMiddleware);
 router.register('GET', /^\/(?!api\/).*$/, staticHandler);
 router.register('GET', '/api/reload', sseReloadHandler);
 
@@ -779,6 +779,30 @@ router.register('GET', '/api/test/message', (req, res) => {
 
 router.register('GET', '/api/suspend/data', (req, res) => {
     Router.json(req, res, { data: { username: 'ok' } });
+}, slowMiddleware);
+
+let counter = 0;
+
+setInterval(() => {
+    counter++
+}, 5000);
+
+router.register('GET', '/api/counter', (req, res) => {
+  Router.json(req, res, {data: {value: counter}});
+}, slowMiddleware);
+router.register('GET', '/api/error', (req, res) => {
+  Router.json(req, res, {code: 400, data: {value: counter}});
+}, slowMiddleware);
+router.register('POST', '/api/counter', (req, res) => {
+  Router.json(req, res, {data: {value: ++counter}});
+}, slowMiddleware);
+router.register('PUT', '/api/counter/{value}', (req, res) => {
+  const value = Number.parseInt(req.params.groups.value, 10);
+  counter = value;
+  Router.json(req, res, {data: {value: counter}});
+}, slowMiddleware);
+router.register('DELETE', '/api/counter', (req, res) => {
+  Router.json(req, res, {data: {value: --counter}});
 }, slowMiddleware);
 
 const httpServer = new HttpServer();

@@ -27,13 +27,13 @@ const MessageForm = ({ onSubmit, disabled }) => {
         //         ///
         //     })
 
-        const formData = new FormData(ev.currentTarget)
-        // multipart/form-data
-        const response = await fetch('http://localhost:9999/api/test/form-multipart', {
-            method: 'POST',
-            body: formData
-        })
-        const data = await response.json()
+        // const formData = new FormData(ev.currentTarget)
+        // // multipart/form-data
+        // const response = await fetch('http://localhost:9999/api/test/form-multipart', {
+        //     method: 'POST',
+        //     body: formData
+        // })
+        // const data = await response.json()
 
         // const formData = new FormData(ev.currentTarget)
         // GET/POST
@@ -47,7 +47,7 @@ const MessageForm = ({ onSubmit, disabled }) => {
         // })
         // const data = await response.json()
 
-        // onSubmit(ev) // TODO: library
+        onSubmit(ev) // TODO: library
 
         // for controlled: send from state
         // for uncontrolled:

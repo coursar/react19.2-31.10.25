@@ -6,7 +6,7 @@ import Main from './showcase/Main.jsx'
 
 createRoot(document.getElementById('root'), {identifierPrefix: 'messages_'}).render(
   // <StrictMode>
-    <App />
+    // <App />
   // </StrictMode>
-  // <Main/>
+  <Main/>
 )
