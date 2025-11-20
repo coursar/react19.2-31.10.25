@@ -1,9 +1,9 @@
-import ReactReduxSideEffect from "./05redux/03ReactReduxSideEffect"
+import Container from "../Messages/Messages"
 
 const Main = () => {
     return (
         <>
-            <ReactReduxSideEffect/>
+            <Container/>
         </>
     )
 }
