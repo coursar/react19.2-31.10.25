@@ -1,9 +1,9 @@
-import Container from "../Messages/Messages"
+import ReactReduxToolkitAsyncThunkFinal from "./05redux/09ReduxToolkitAsyncThunkFinal"
 
 const Main = () => {
     return (
         <>
-            <Container/>
+            <ReactReduxToolkitAsyncThunkFinal/>
         </>
     )
 }

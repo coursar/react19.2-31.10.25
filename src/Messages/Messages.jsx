@@ -97,7 +97,7 @@ const Messages = () => {
 
   useEffect(() => {
     dispatch(loadMessages())
-  }, [])
+  }, [dispatch])
 
   /**
    * 

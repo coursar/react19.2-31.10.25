@@ -1,7 +1,8 @@
 // 1. State Shape
 // counter
-import { useDispatch, useSelector } from 'react-redux'
-import { combineReducers, legacy_createStore } from 'redux'
+import { useDispatch, useSelector, Provider } from 'react-redux'
+import { combineReducers, legacy_createStore, applyMiddleware, compose } from 'redux'
+import { thunk } from 'redux-thunk'
 
 const initialCounterState = {
     value: 0,
@@ -31,16 +32,31 @@ const rootReducer = combineReducers({
     // messages: messagesReducer
 })
 
-const store = legacy_createStore(
-    rootReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-)
+const logMiddleware = (store) => (next) => (action) => {
+    console.log('dispatching', action)
+    return next(action)
+}
+
+const middlewares = [logMiddleware, thunk]
+
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        // Specify extension’s options like name, actionsDenylist, actionsCreators, serialize...
+      })
+    : compose;
+
+const enhancer = composeEnhancers(
+  applyMiddleware(...middlewares),
+  // other store enhancers if any
+);
+const store = legacy_createStore(rootReducer, enhancer);
 
 // store.getState
 // store.dispatch
 // store.subscribe
 
-const ReactReduxSideEffect = () => {
+const ReactReduxThunk = () => {
     return (
         <>
             <Provider store={store}>
@@ -64,7 +80,7 @@ const incrementFail = (error) => ({
     error,
 })
 
-const increment = async (dispatch) => {
+const increment = () => async (dispatch, getState) => {
     dispatch(incrementRequest())
     try {
         const response = await fetch(
@@ -93,8 +109,8 @@ const Subscriber = () => {
     const dispatch = useDispatch()
 
     const handleClick = () => {
-        increment(dispatch)
-        // dispatch(increment()) => redux thunk
+        // increment(dispatch)
+        dispatch(increment()) // dispatch(fn)
     }
 
     // bad practice
@@ -111,4 +127,4 @@ const Subscriber = () => {
     )
 }
 
-export default ReactReduxSideEffect
+export default ReactReduxThunk

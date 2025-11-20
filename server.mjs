@@ -783,9 +783,9 @@ router.register('GET', '/api/suspend/data', (req, res) => {
 
 let counter = 0;
 
-setInterval(() => {
-    counter++
-}, 5000);
+// setInterval(() => {
+//     counter++
+// }, 5000);
 
 router.register('GET', '/api/counter', (req, res) => {
   Router.json(req, res, {data: {value: counter}});
